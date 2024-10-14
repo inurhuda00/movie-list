@@ -40,59 +40,36 @@
       </section>
 
       <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-[7.5rem]">
-        <div class="bg-gray-900 rounded-lg overflow-hidden">
-          <img src="https://via.placeholder.com/150" alt="Movie 1" class="w-full aspect-[2/3] object-cover">
-          <div class="p-4">
-            <h3 class="text-white text-body-regular mb-3 font-semibold">Movie 1</h3>
-            <p class="text-gray-400 text-body-small">2021</p>
-          </div>
-        </div>
-        <div class="bg-gray-900 rounded-lg overflow-hidden">
-          <img src="https://via.placeholder.com/150" alt="Movie 1" class="w-full aspect-[2/3] object-cover">
-          <div class="p-4">
-            <h3 class="text-white text-body-regular mb-3 font-semibold">Movie 1</h3>
-            <p class="text-gray-400 text-body-small">2021</p>
-          </div>
-        </div>
-        <div class="bg-gray-900 rounded-lg overflow-hidden">
-          <img src="https://via.placeholder.com/150" alt="Movie 1" class="w-full aspect-[2/3] object-cover">
-          <div class="p-4">
-            <h3 class="text-white text-body-regular mb-3 font-semibold">Movie 1</h3>
-            <p class="text-gray-400 text-body-small">2021</p>
-          </div>
-        </div>
-        <div class="bg-gray-900 rounded-lg overflow-hidden">
-          <img src="https://via.placeholder.com/150" alt="Movie 1" class="w-full aspect-[2/3] object-cover">
-          <div class="p-4">
-            <h3 class="text-white text-body-regular mb-3 font-semibold">Movie 1</h3>
-            <p class="text-gray-400 text-body-small">2021</p>
-          </div>
+        <div v-for="movie in movies" :key="movie.id" class="bg-gray-900 rounded-lg overflow-hidden">
+          <router-link :to="{ name: 'Edit', params: { id: movie.id } }" aria-label="Edit movie details">
+            <img :src="movie.thumbnail" :alt="`Thumbnail for ${movie.title}`" class="w-full aspect-[2/3] object-cover"
+              loading="lazy" />
+            <div class="p-4">
+              <h3 class="text-white text-body-regular mb-3 font-semibold">{{ movie.title }}</h3>
+              <p class="text-gray-400 text-body-small">{{ movie.year }}</p>
+            </div>
+          </router-link>
         </div>
       </section>
 
       <section class="flex justify-center items-center mt-8 space-x-4 pb-24">
-        <button class="bg-gray-700 text-white px-4 py-2 rounded">Prev</button>
-        <button class="bg-green-500 text-white px-4 py-2 rounded">1</button>
-        <button class="bg-gray-700 text-white px-4 py-2 rounded">2</button>
-        <button class="bg-gray-700 text-white px-4 py-2 rounded">Next</button>
+        <button v-for="(page, index) in meta?.links" :key="index" @click="fetchMovies(page.url.split('page=')[1])"
+          :class="{ 'bg-green-500 text-white px-4 py-2 rounded': page.active, 'bg-gray-700 text-white px-4 py-2 rounded': !page.active }">
+          {{ page.label }}
+        </button>
+
       </section>
     </div>
-    <!-- <IEmptyList /> -->
-
-    <!-- <div class="flex flex-center gap-x-2 absolute top-0 pt-4">
-      <router-link to="/protected">
-        <IButton>Go to Protected Page</IButton>
-      </router-link>
-      <IButton @click="logout" v-if="isAuthenticated">Logout</IButton>
-    </div> -->
   </div>
 
 </template>
 
 <script setup>
 import { useAuthStore } from "stores/auth";
+import { useMovieStore } from "stores/movie";
 import { storeToRefs } from "pinia";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
+import { onMounted } from 'vue';
 
 import IButton from "src/components/IButton.vue";
 
@@ -101,12 +78,31 @@ defineOptions({
 });
 
 const authStore = useAuthStore();
+const movieStore = useMovieStore();
 const router = useRouter();
+const route = useRoute();
+
+const { page } = route.query
 
 const { isAuthenticated } = storeToRefs(authStore);
+const { movies, meta } = storeToRefs(movieStore);
 
 async function logout() {
   await authStore.logout();
   router.push({ name: "Login" });
+}
+
+onMounted(() => {
+  movieStore.fetchMovies(page);
+});
+
+function fetchMovies(page) {
+  router.push({
+    name: 'Home',
+    query: {
+      page
+    },
+  })
+  movieStore.fetchMovies(page);
 }
 </script>

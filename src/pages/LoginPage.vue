@@ -56,7 +56,7 @@ async function forceLogin() {
   authStore.clearErrors();
   await authStore.login({
     email: "inurhuda00@gmail.com",
-    password: "Nurhud@123",
+    password: "password",
     rememberMe: true
   });
 

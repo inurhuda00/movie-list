@@ -10,7 +10,9 @@ axios.defaults.withXSRFToken = true;
 // good idea to move this instance creation inside of the
 // "export default () => {}" function below (which runs individually
 // for each client)
-const api = axios.create({ baseURL: "http://localhost:8000" });
+const api = axios.create({ baseURL: "http://localhost:8000", headers: {
+  "X-Requested-With": "XMLHttpRequest",
+} });
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
