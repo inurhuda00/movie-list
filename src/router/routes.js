@@ -12,18 +12,28 @@ const routes = [
       {
         path: "/protected",
         name: "Protected",
-        component: () => import("pages/Protected.vue"),
+        component: () => import("src/pages/ProtectedPage.vue"),
         meta: { requiresAuth: true },
       },
       {
         path: "/login",
         name: "Login",
-        component: () => import("pages/Login.vue"),
+        component: () => import("src/pages/LoginPage.vue"),
       },
       {
         path: "/register",
         name: "Register",
-        component: () => import("pages/Register.vue"),
+        component: () => import("src/pages/RegisterPage.vue"),
+      },
+      {
+        path: "/add",
+        name: "Add",
+        component: () => import("src/pages/AddPage.vue"),
+      },
+      {
+        path: "/edit/:id",
+        name: "Edit",
+        component: () => import("src/pages/EditPage.vue"),
       },
     ],
   },

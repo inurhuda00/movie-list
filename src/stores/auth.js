@@ -65,9 +65,13 @@ export const useAuthStore = defineStore("auth", {
     },
     async logout() {
       try {
+        await api.get("/sanctum/csrf-cookie");
         await api.post("/api/logout");
+
         this.user = null;
       } catch (error) {
+        this.user = null;
+
         console.error("logout error:", error);
       }
     },

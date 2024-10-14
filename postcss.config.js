@@ -2,6 +2,7 @@
 // https://github.com/michael-ciniawsky/postcss-load-config
 
 import autoprefixer from "autoprefixer";
+import tailwindcss from "tailwindcss";
 // import rtlcss from 'postcss-rtlcss'
 
 export default {
@@ -26,5 +27,6 @@ export default {
     // 2. optionally set quasar.config.js > framework > lang to an RTL language
     // 3. uncomment the following line (and its import statement above):
     // rtlcss()
+    tailwindcss
   ],
 };

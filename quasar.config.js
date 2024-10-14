@@ -17,7 +17,7 @@ export default configure((ctx) => {
     boot: ["i18n", "axios", "auth"],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
-    css: ["app.scss"],
+    css: ["tailwind.css"],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
@@ -96,7 +96,16 @@ export default configure((ctx) => {
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
     framework: {
-      config: {},
+      config: {
+        brand: {
+          primary: '#2BD17E',
+          error: '#EB5757',
+          background: '#093545',
+          input: '#224957',
+          card: '#092C39',
+        }
+      },
+      cssAddon: false,
 
       // iconSet: 'material-icons', // Quasar icon set
       // lang: 'en-US', // Quasar language pack
